@@ -5,13 +5,15 @@
 # @文件         : TrojanLinks - getlinks.py
 # @创建时间     : 2023/11/30 16:09
 # -------------------------------------------------------------------------------
+from datetime import datetime
 import requests
 import random
 import base64
 import json
 import os
+from Telegram_bot import send_message
 
-url = os.environ['url']
+url = os.environ['trojan_url']
 
 
 class Decode:
@@ -86,7 +88,7 @@ class Decode:
 
 def getlink():
     try:
-        headers = {"User-Agent": "Dalvik/2.1.0 (Linux; U; Android 10; MI 8 MIUI/20.9.4)"}
+        headers = {"User-Agent": "Dalvik/2.1.0 (Linux; U; Android 10; MI 9 MIUI/20.9.4)"}
         response = requests.get(url, headers=headers)
         return response.text
     except Exception as e:
@@ -109,13 +111,8 @@ def main():
             port = link['c']
             result = int(random.random() * len(port))
             sb.append(str(port[result]))
-            sb.append("?security=tls")
-            sb.append("&alpn=h2,http/1.1")
-            sb.append("&type=tcp")
-            sb.append("&sni=www.myethblog.com")
-            sb.append("&headerType=none")
-            sb.append("#")
-            sb.append(link['d'])
+            sb.append("?security=tls&alpn=h2,http/1.1&type=tcp&sni=appsvs.shop&headerType=none#")
+            sb.append(link['d'] + '|Github搜索TrojanLinks')
             sb.append("\n")
         trojan_links = base64.b64encode((''.join(sb)).encode('utf-8')).decode()
         with open("./links/trojan", "w") as f:
@@ -126,3 +123,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # message = '#trojan ' + '#订阅' + '\n' + datetime.now().strftime("%Y年%m月%d日%H:%M:%S") + '\n' + 'Trojan订阅每30分钟自动更新：' + '\n' + 'https://raw.githubusercontent.com/Huibq/TrojanLinks/master/links/trojan'
+    # send_message(os.environ['chat_id'], message, os.environ['bot_token'])
